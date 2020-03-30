@@ -369,19 +369,10 @@ async function main() {
         }
         var diffMin = Math.floor(curTime - isClassFound.startDate)/1000/60;
 
-        if(diffMin > 30) {
+        if(diffMin > 2) {
             isRunning = false;
             console.log();
             console.log(title('Bye bye 🙏'));
-        }
-        else if(diffMin > 15) {                 // 15min after class
-            timeSpan.milliseconds = 300000;
-        }
-        else if(diffMin > 10) {
-            timeSpan.milliseconds = 60000;      // 10min after class
-        }
-        else if(diffMin > 5) {
-            timeSpan.milliseconds = 30000;      // 5min after class
         }
         else if(diffMin <= -20) {
             timeSpan.milliseconds = 300000;     // +20min before class
