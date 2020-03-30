@@ -132,6 +132,7 @@ function sendMail(whiteList, youtube)
     });
 }
 
+// Get all subscibed clients
 function getClassClients(classData, youtube)
 {
     return new Promise((resolve,reject) => {
