@@ -72,7 +72,7 @@ function sendMail(whiteList, youtube)
 {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
-        host: 'mail.cyon.ch',
+        host: '',
         port: 465,
         secure: true,
         auth: {
@@ -82,7 +82,7 @@ function sendMail(whiteList, youtube)
     });
 
     let message = {
-        from: '', // sender address
+        from: '"Sender" <email>', // sender address
         bcc: whiteList.join(', '), // list of receivers
         subject: "", // Subject line
         text: '', // plain text body
@@ -264,7 +264,7 @@ function getClassClients(classData, youtube)
                 }
             };
             showClassInfo(fakeClass);
-            let fakeEmails = [];
+            let fakeEmails = [''];
             resolve(fakeEmails);
         }
     });
@@ -306,9 +306,9 @@ async function main() {
     if(!CONSOLE_ACTIVE) {
         console.clear();
     }
-    console.log(bar('**********************************************************'));
-    console.log(title('Live Streaming helper'));
-    console.log(bar('**********************************************************'));
+    console.log(bar(  '**********************************************************'));
+    console.log(title('Live Streaming Helper                               v1.0.0'));
+    console.log(bar(  '**********************************************************'));
     let youtube = await prompts({
         type: 'text',
         name: 'link',
@@ -336,7 +336,7 @@ async function main() {
         // Check if tinymailer can be terminated or time span adapted.
         var europeTime = new Date().toLocaleString("en-US", {timeZone: "Europe/Berlin"});
         var curTime = new Date(europeTime);
-        if(DEV) {
+        if(DEV && !CONFIGURATION_ACTIVE) {
             var usTime = new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
             curTime = new Date(usTime);
         }
@@ -360,7 +360,7 @@ async function main() {
             timeSpan.milliseconds = 300000;     // +20min before class
         }
         else if(diffMin > -5) {
-            timeSpan.milliseconds = 30000;      // +5min before class
+            timeSpan.milliseconds = 20000;      // +5min before class
         }
         else if(diffMin > -11) {
             timeSpan.milliseconds = 30000;      // +11min before class
@@ -404,8 +404,7 @@ async function main() {
                 })
                 .catch(err => {
                     if(DEV) {
-                        console.log(error('Staff email sending failed:'));
-                        console.log(error(err));
+                        console.log(error('Staff email sending failed: ' + err));
                     }
                 });
             }
@@ -418,8 +417,7 @@ async function main() {
             })
             .catch(err => {
                 if(DEV) {
-                    console.log(error('Client email sending failed:'));
-                    console.log(error(err));
+                    console.log(error('Client email sending failed:') + err);
                 }
             });
         })
