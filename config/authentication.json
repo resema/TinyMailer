@@ -1,6 +1,8 @@
 {
+    "host": "",
+    "port": 465,
     "username": "",
     "password": "",
     "apikey": "",
-    "siteid": -1
+    "siteid": 0
 }

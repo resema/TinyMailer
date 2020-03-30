@@ -6,14 +6,14 @@ const prompts = require('prompts');
 const chalk = require('chalk');
 
 // Dev flags
-let DEV = false;
+let DEV = true;
 let CONSOLE_ACTIVE = false;
 let TIMEWARP_ACTIVE = false;
 
 // Going live flags
-let MAILING_ACTIVE = false;
+let MAILING_ACTIVE = true;
 let POOLING_ACTIVE = true;
-let CONFIGURATION_ACTIVE = true;
+let CONFIGURATION_ACTIVE = false;
 
 // Configuration
 const error = chalk.bold.redBright;
@@ -24,11 +24,21 @@ const italic = chalk.italic.white;
 
 // Auth information
 const authInfo = {
+    host: '',
+    port: 465,
+    emailAddr: '',
     user: '',
     pwd: '',
     apiKey: '',
     siteId: -1
-}
+};
+
+const mailInfo = {
+    address: '',
+    subject: '',
+    plaintext: '',
+    htmltext: '',
+};
 
 // read json file
 function readJSON(filename) {
@@ -52,18 +62,31 @@ function getFilepath() {
 }
 
 // Get Authentication info
-function getAuthenticationInfo(filepath){
+function getAuthenticationInfo(filepath) {
     // Read Auth File
     let authData = readJSON(filepath + 'authentication.json');
+    authInfo.host = authData.host;
+    authInfo.port = authData.port;
+    authInfo.emailAddr = authData.emailaddress;
     authInfo.user = authData.username;
     authInfo.pwd = authData.password;
     authInfo.apiKey = authData.apikey;
     authInfo.siteId = authData.siteid;
 }
 
+// Get Mail info
+function getMailInformation(youtube) {
+    let mailData = readJSON('./email/metadata.json');
+    mailInfo.address = mailData.emailaddress;
+    mailInfo.subject = mailData.subject;
+    mailInfo.plaintext = mailData.plaintext;
+    mailInfo.htmltext = createMessage(youtube);
+
+}
+
 // Create HTML message
 function createMessage(youtube) {
-    let message = readHTML('./html/message.html');
+    let message = readHTML('./email/message.html');
     return message.replace(/YOUTUBE_LINK/g, youtube.link);
 }
 
@@ -72,8 +95,8 @@ function sendMail(whiteList, youtube)
 {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
-        host: '',
-        port: 465,
+        host: authInfo.host,
+        port: authInfo.port,
         secure: true,
         auth: {
             user: authInfo.user,
@@ -82,11 +105,11 @@ function sendMail(whiteList, youtube)
     });
 
     let message = {
-        from: '"Sender" <email>', // sender address
+        from: mailInfo.address, // sender address
         bcc: whiteList.join(', '), // list of receivers
-        subject: "", // Subject line
-        text: '', // plain text body
-        html: createMessage(youtube)
+        subject: mailInfo.subject, // Subject line
+        text: mailInfo.plaintext, // plain text body
+        html: mailInfo.htmltext
     };
 
     return new Promise((resolve,reject) => {
@@ -264,7 +287,7 @@ function getClassClients(classData, youtube)
                 }
             };
             showClassInfo(fakeClass);
-            let fakeEmails = [''];
+            let fakeEmails = ['mail.mail@mail.mail'];
             resolve(fakeEmails);
         }
     });
@@ -307,7 +330,7 @@ async function main() {
         console.clear();
     }
     console.log(bar(  '**********************************************************'));
-    console.log(title('Live Streaming Helper                               v1.0.0'));
+    console.log(title('Live Streaming Helper                             v1.0.1.0'));
     console.log(bar(  '**********************************************************'));
     let youtube = await prompts({
         type: 'text',
@@ -323,6 +346,9 @@ async function main() {
 
     // Read Auth File
     getAuthenticationInfo(filepath);
+
+    // Read Mail File
+    getMailInformation(youtube);
 
     // Read Staff List
     let staffList = readJSON(filepath + 'staffList.json');
@@ -417,7 +443,7 @@ async function main() {
             })
             .catch(err => {
                 if(DEV) {
-                    console.log(error('Client email sending failed:') + err);
+                    console.log(error('Client email sending failed: ') + err);
                 }
             });
         })
