@@ -11,9 +11,9 @@ let CONSOLE_ACTIVE = false;
 let TIMEWARP_ACTIVE = false;
 
 // Going live flags
-let MAILING_ACTIVE = true;
+let MAILING_ACTIVE = false;
 let POOLING_ACTIVE = true;
-let CONFIGURATION_ACTIVE = false;
+let CONFIGURATION_ACTIVE = true;
 
 // Configuration
 const error = chalk.bold.redBright;
@@ -82,10 +82,10 @@ function sendMail(whiteList, youtube)
     });
 
     let message = {
-        from: '"Spirit Studio Basel" <office@spirit-studio.ch>', // sender address
+        from: '', // sender address
         bcc: whiteList.join(', '), // list of receivers
-        subject: "Spirit-Studio Live Stream", // Subject line
-        text: 'Unter dem ' + youtube.link + ' findest Du die aktuelle Stunde. Schön bist Du dabei - wir wünschen Dir viel Vergnügen! Dein Spirit Team #stayhealthy', // plain text body
+        subject: "", // Subject line
+        text: '', // plain text body
         html: createMessage(youtube)
     };
 
@@ -264,7 +264,7 @@ function getClassClients(classData, youtube)
                 }
             };
             showClassInfo(fakeClass);
-            let fakeEmails = ['renato.semadeni@gmail.ch'];
+            let fakeEmails = [];
             resolve(fakeEmails);
         }
     });
@@ -434,6 +434,7 @@ async function main() {
         // adjust time span
         await getTimeSpan();
     }
+
 }
 
 main();
