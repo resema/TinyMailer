@@ -4,3 +4,4 @@ Release notes:
 v1.0.0.0 - Initial
 v1.0.1.0 - Stopping after some time
 v1.1.0.0 - Possibility to resend emails after class start
+v1.1.0.1 - Address Bug 

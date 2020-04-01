@@ -11,9 +11,9 @@ let CONSOLE_ACTIVE = false;
 let TIMEWARP_ACTIVE = false;
 
 // Going live flags
-let MAILING_ACTIVE = false;
+let MAILING_ACTIVE = true;
 let POOLING_ACTIVE = true;
-let CONFIGURATION_ACTIVE = true;
+let CONFIGURATION_ACTIVE = false;
 
 // Configuration
 const error = chalk.bold.redBright;
@@ -342,7 +342,7 @@ async function showIntroAndAskForLink() {
         name: 'link',
         message: 'Enter the YouTube link:',
         initial: '',
-        validate: link => link.match(/www./i) ? true : 'Not valid input'
+        validate: link => link.match(/http/i) ? true : 'Not valid input'
     });
 
     return youtube;
@@ -365,7 +365,7 @@ async function getNewLink() {
         name: 'link',
         message: 'Enter a new YouTube link:',
         initial: '',
-        validate: link => link.match(/www/i) ? true : 'Not valid input'
+        validate: link => link.match(/http/i) ? true : 'Not valid input'
     });
 
     return newLink;
