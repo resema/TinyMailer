@@ -6,14 +6,14 @@ const prompts = require('prompts');
 const chalk = require('chalk');
 
 // Dev flags
-let DEV = true;
+let DEV = false;
 let CONSOLE_ACTIVE = false;
 let TIMEWARP_ACTIVE = false;
 
 // Going live flags
-let MAILING_ACTIVE = true;
+let MAILING_ACTIVE = false;
 let POOLING_ACTIVE = true;
-let CONFIGURATION_ACTIVE = false;
+let CONFIGURATION_ACTIVE = true;
 
 // Configuration
 const error = chalk.bold.redBright;
@@ -91,7 +91,7 @@ function createMessage(youtube) {
 }
 
 // send mail with defined transport object
-function sendMail(whiteList, youtube)
+function sendMail(whiteList)
 {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
@@ -128,6 +128,38 @@ function sendMail(whiteList, youtube)
                 // No mailing
                 resolve(whiteList);
             }
+        }
+    });
+}
+
+// Send mails to staff and clients
+async function sendAllMails(staffEmails, clientEmails, nbrOfMailsSent) {
+    // Send mails to staff first
+    if(!staffEmails.status) {
+        staffEmails.status = true;
+        sendMail(staffEmails.addresses)
+        .then(staffEmails => {
+            console.log(italic('Staff mails sent: ') + staffEmails.length);
+            if(DEV) {
+                console.log(staffEmails)
+            }
+        })
+        .catch(err => {
+            if(DEV) {
+                console.log(error('Staff email sending failed: ' + err));
+            }
+        });
+    }
+    // Send mails to clients
+    sendMail(clientEmails)
+    .then(sentEmails => {
+        console.log(sentEmails)
+        console.log(italic('Current sent mails: ') + sentEmails.length);
+        console.log('Total sent mails: ' + nbrOfMailsSent);
+    })
+    .catch(err => {
+        if(DEV) {
+            console.log(error('Client email sending failed: ') + err);
         }
     });
 }
@@ -258,7 +290,7 @@ function getClassClients(classData, youtube)
                         }
                     };
                     showClassInfo(noClass);                    
-                    reject('No class found');
+                    reject('findClass: No class found');
                 }
             }
         }
@@ -288,10 +320,81 @@ function getClassClients(classData, youtube)
                 }
             };
             showClassInfo(fakeClass);
-            let fakeEmails = ['mail.mail@mail.mail'];
+            let fakeEmails = ['renato.semadeni@gmail.com'];
             resolve(fakeEmails);
         }
     });
+}
+
+// Show intro message and ask for link
+async function showIntroAndAskForLink() {
+    let version = readJSON('./version.json');
+
+    // Get YouTube link
+    if(!CONSOLE_ACTIVE) {
+        console.clear();
+    }
+    console.log(bar(  '**********************************************************'));
+    console.log(title('Live Streaming Helper                             ') + italic(version.version));
+    console.log(bar(  '**********************************************************'));
+    let youtube = await prompts({
+        type: 'text',
+        name: 'link',
+        message: 'Enter the YouTube link:',
+        initial: '',
+        validate: link => link.match(/www./i) ? true : 'Not valid input'
+    });
+
+    return youtube;
+}
+
+// Show new link info
+function showNewLink () {
+    if(!CONSOLE_ACTIVE) {
+        console.clear();
+    }
+    console.log(bar(  '**********************************************************'));
+    console.log(title('Resend emails with new link? - ') + italic('To quit press \"Ctrl + C\"'));
+    console.log(bar(  '**********************************************************'));
+}
+
+// Get new link
+async function getNewLink() {
+    let newLink = await prompts({
+        type: 'text',
+        name: 'link',
+        message: 'Enter a new YouTube link:',
+        initial: '',
+        validate: link => link.match(/www/i) ? true : 'Not valid input'
+    });
+
+    return newLink;
+}
+
+// Resend Link, returns true if user wants to exit
+async function resendLink(staffEmails, clientEmails) {
+    // get the new link
+    let newLink = await getNewLink();
+    getMailInformation(newLink);
+
+    if(newLink.link != undefined) {
+        // Resend staff and client mails
+        staffEmails.status = false;
+        await sendAllMails(staffEmails, clientEmails, clientEmails.length);
+       
+        // Wait a bit....
+        await sleep(10000);
+       
+        return false;
+    }
+    return true;
+}
+
+// Byebye message
+function byebye() {
+    // Terminating app
+    console.log();
+    console.log(title('Bye bye 🙏'));
 }
 
 // Sleeper helper function
@@ -326,19 +429,13 @@ async function main() {
     // Define filepath
     const filepath = getFilepath();
 
-    // Get YouTube link
-    if(!CONSOLE_ACTIVE) {
-        console.clear();
+    let youtube = await showIntroAndAskForLink();
+
+    // If ctrl+c is clicked, terminated app
+    if(youtube.link == undefined) {
+        byebye();
+        return;
     }
-    console.log(bar(  '**********************************************************'));
-    console.log(title('Live Streaming Helper                             v1.0.1.0'));
-    console.log(bar(  '**********************************************************'));
-    let youtube = await prompts({
-        type: 'text',
-        name: 'link',
-        message: 'Enter the YouTube link:',
-        // validate: link => 
-    });
 
     let divisor = 1;
     if(TIMEWARP_ACTIVE) {
@@ -371,8 +468,6 @@ async function main() {
 
         if(diffMin > 2) {
             isRunning = false;
-            console.log();
-            console.log(title('Bye bye 🙏'));
         }
         else if(diffMin <= -20) {
             timeSpan.milliseconds = 300000;     // +20min before class
@@ -410,34 +505,8 @@ async function main() {
                     whiteList.push(emailList[i]);
                 }
             }
-            // Send mails to staff first
-            if(!staffEmails.status) {
-                staffEmails.status = true;
-                sendMail(staffEmails.addresses, youtube)
-                .then(staffEmails => {
-                    console.log(italic('Staff mails sent: ') + staffEmails.length);
-                    if(DEV) {
-                        console.log(staffEmails)
-                    }
-                })
-                .catch(err => {
-                    if(DEV) {
-                        console.log(error('Staff email sending failed: ' + err));
-                    }
-                });
-            }
-            // Send mails to clients
-            sendMail(whiteList, youtube)
-            .then(sentEmails => {
-                console.log(sentEmails)
-                console.log(italic('Current sent mails: ') + sentEmails.length);
-                console.log('Total sent mails: ' + blackList.length);
-            })
-            .catch(err => {
-                if(DEV) {
-                    console.log(error('Client email sending failed: ') + err);
-                }
-            });
+            // Send mails to staff and clients
+            sendAllMails(staffEmails, whiteList, blackList.length);
         })
         .catch(err => {
             if(DEV) {
@@ -451,6 +520,23 @@ async function main() {
         await getTimeSpan();
     }
 
+    // if no class is found exit
+    if(isClassFound.classId == -1) {
+        byebye();
+        return;
+    }
+
+    // Show new link info
+    showNewLink();
+
+    // Need to resend the mail or quit
+    let isFinished = false;
+    while(!isFinished) {
+        // Get new link
+        isFinished = await resendLink(staffEmails, blackList);
+    }
+    
+    byebye();
 }
 
 main();
