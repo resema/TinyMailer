@@ -11,16 +11,26 @@ let CONSOLE_ACTIVE = false;
 let TIMEWARP_ACTIVE = false;
 
 // Going live flags
-let MAILING_ACTIVE = true;
+let MAILING_ACTIVE = false;
 let POOLING_ACTIVE = true;
-let CONFIGURATION_ACTIVE = false;
+let CONFIGURATION_ACTIVE = true;
 
-// Configuration
-const error = chalk.bold.redBright;
-const warning = chalk.bold.italic.yellow;
-const title = chalk.bold.whiteBright;
-const bar = chalk.magenta;
-const italic = chalk.italic.white;
+// Theme flag
+let DARKTHEME_ACTIVE = true;
+
+// Configuration color theme
+let error = chalk.bold.redBright;
+let warning = chalk.bold.italic.yellow;
+let bar = chalk.magenta;
+let title;
+let italic;
+if(DARKTHEME_ACTIVE) {
+    title = chalk.bold.whiteBright;
+    italic = chalk.italic.white;
+} else {
+    title = chalk.bold;
+    italic = chalk.italic;
+}
 
 // Auth information
 const authInfo = {
