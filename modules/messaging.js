@@ -20,7 +20,7 @@ let authInfo;
 // Create HTML message
 function createMessage(youtube) {
     let message = utils.readHTML('./email/message.html');
-    return message.replace(/YOUTUBE_LINK/g, youtube.link);
+    return message.replace(/YOUTUBE_LINK/g, youtube);
 }
 
 // Get Mail info
@@ -114,16 +114,39 @@ async function sendAllMails(staffEmails, clientEmails, nbrOfMailsSent) {
 // Resend Link, returns true if user wants to exit
 async function resendLink(staffEmails, clientEmails, youtube) {
     // get the new link
-    let newLink = await gui.getNewLink(youtube);
-    getMailInformation(newLink);
+    let sendInfo = await gui.getNewLinkAndToWho(youtube);
+    getMailInformation(sendInfo.link);
 
-    if(newLink.link != undefined) {
+    if(sendInfo.link != undefined) {
+        // set the new link as valid
+        youtube.link = sendInfo.link;
+
         // Resend staff and client mails
-        staffEmails.status = false;
-        await sendAllMails(staffEmails, clientEmails, clientEmails.length);
+        let resendEmails = [];
+        if(sendInfo.who == undefined) {
+            return false;
+        } else if(sendInfo.who == 0) {
+            staffEmails.status = false;
+            resendEmails = clientEmails;
+        } else if(sendInfo.who == 'N' || sendInfo.who == 'n') {
+            let newEmails = await gui.getNewEmailAddresses();
+            if(newEmails.address == undefined) {
+                return true;
+            }
+            for(let idx = 0; idx < newEmails.address.length; idx++) {
+                resendEmails.push(newEmails.address[idx]);
+                clientEmails.push(newEmails.address[idx]);
+            }
+        } else {
+            for(let idx = 0; idx < sendInfo.who.length; idx++) {
+                let index = parseInt(sendInfo.who[idx])-1;
+                resendEmails.push(clientEmails[index]);
+            }
+        }
+        await sendAllMails(staffEmails, resendEmails, resendEmails.length);
        
         // Wait a bit....
-        await utils.sleep(10000);
+        await utils.sleep(3000);
        
         return false;
     }

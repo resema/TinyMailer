@@ -123,15 +123,15 @@ function getClassClients(classData, youtube)
         } else {
             // Fake Pooling
             let fakeClass = { 
-                StartDateTime: new Date('April 5 2020 03:53'),
-                EndDateTime: new Date('April 5 2020 04:30'),
+                StartDateTime: new Date('April 5 2020 06:07'),
+                EndDateTime: new Date('April 5 2020 06:30'),
                 ClassDescription: {
                     Name: 'Zumba'
                 }
             };
 
             gui.showClassInfo(classData, fakeClass, youtube);
-            let fakeEmails = ['renato.semadeni@gmail.com'];
+            let fakeEmails = ['renato.semadeni@gmail.com', 'jibbar@gmx.ch'];
             resolve(fakeEmails);
         }
     });

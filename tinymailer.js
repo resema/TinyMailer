@@ -52,7 +52,7 @@ async function main() {
     polling.setAuthentication(authInfo);
 
     // Read Mail File
-    messaging.getMailInformation(youtube);
+    messaging.getMailInformation(youtube.link);
 
     // Read Staff List
     let staffList = utils.readJSON(filepath + 'staffList.json');
@@ -93,12 +93,12 @@ async function main() {
         return;
     }
 
-    // Show new link info
-    gui.showNewLink(blackList);
-
     // Need to resend the mail or quit
     let isFinished = false;
     while(!isFinished) {
+        // Show new link info
+        gui.showNewLink(blackList);
+
         // Get new link
         isFinished = await messaging.resendLink(staffEmails, blackList, youtube);
     }

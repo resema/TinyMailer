@@ -8,6 +8,8 @@ const theme = {
     bar: chalk.magenta,
     title: chalk.bold.whiteBright,
     italic: chalk.italic.white,
+    bold: chalk.bold,
+    green: chalk.green
 }
 
 // const theme = {

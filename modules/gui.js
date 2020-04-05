@@ -74,11 +74,22 @@ function showNewLink(emails) {
     console.log(theme.bar(  '**********************************************************'));
     console.log(theme.title('Resend emails with new link? - ') + theme.italic('To quit press \"Ctrl + C\"'));
     console.log(theme.bar(  '**********************************************************'));
-    console.log(emails);
+    
+    console.log('[' + theme.bold(0) + ']' + '\t' + theme.green('Complete list and staff'));
+    console.log();
+    for(let idx = 0; idx < emails.length; idx++) {
+        console.log('[' + theme.bold(idx+1) + ']' + '\t' + theme.green(emails[idx]));
+    }
+    console.log();
+    console.log('[' + theme.bold('N') + ']' + '\t' + theme.green('New email address'));
 }
 
 // Get new link
-async function getNewLink(youtube) {
+async function getNewLinkAndToWho(youtube) {
+    let sendInfo = {
+        link: '',
+        who: -1
+    }
     let newLink = await prompts({
         type: 'text',
         name: 'link',
@@ -86,8 +97,39 @@ async function getNewLink(youtube) {
         initial: youtube.link,
         validate: link => link.match(/http/i) ? true : 'Not valid input'
     });
+    if(newLink.link == undefined) {
+        sendInfo.link = undefined;
+        sendInfo.who = undefined;
+        return sendInfo;
+    }
 
-    return newLink;
+    let who = await prompts({
+        type: 'list',
+        name: 'value',
+        message: 'To who should another mail be sent?',
+        validate: value => value.match(/^([0-9]*(\s?,\s?[0-9]*)*$)|([N]$)/i) ? true : 'Not valid input!' 
+    });
+    if(who.value == undefined) {
+        sendInfo.link = undefined;
+        sendInfo.who = undefined;
+        return sendInfo;
+    }
+
+    sendInfo.link = newLink.link;
+    sendInfo.who = who.value;
+    return sendInfo;
+}
+
+// Get a new email address
+async function getNewEmailAddresses() {
+    let newEmails = await prompts({
+        type: 'list',
+        name: 'address',
+        message: 'Enter a new email address(es):',
+        initial: ''
+    });
+
+    return newEmails;
 }
 
 // Byebye message
@@ -101,6 +143,7 @@ module.exports = {
     showIntroAndAskForLink: showIntroAndAskForLink,
     showClassInfo: showClassInfo,
     showNewLink: showNewLink,
-    getNewLink: getNewLink,
+    getNewLinkAndToWho: getNewLinkAndToWho,
+    getNewEmailAddresses: getNewEmailAddresses,
     byebye: byebye
 }

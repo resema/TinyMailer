@@ -1,8 +1,8 @@
 "use strict";
 const flags = {
     // Dev flags
-    DEV: true,
-    CONSOLE_ACTIVE: true,
+    DEV: false,
+    CONSOLE_ACTIVE: false,
     TIMEWARP_ACTIVE: false,
 
     // Going live flags
