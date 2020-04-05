@@ -1,10 +1,10 @@
 "use strict";
 const nodemailer = require("nodemailer");
 
-const configuration = require('./configuration');
 const theme = require('./colortheme');
 const flags = require('./flags');
 const utils = require('./utils');
+const gui = require('./gui');
 
 // Email information
 const mailInfo = {
@@ -112,9 +112,9 @@ async function sendAllMails(staffEmails, clientEmails, nbrOfMailsSent) {
 }
 
 // Resend Link, returns true if user wants to exit
-async function resendLink(staffEmails, clientEmails) {
+async function resendLink(staffEmails, clientEmails, youtube) {
     // get the new link
-    let newLink = await getNewLink();
+    let newLink = await gui.getNewLink(youtube);
     getMailInformation(newLink);
 
     if(newLink.link != undefined) {
@@ -123,7 +123,7 @@ async function resendLink(staffEmails, clientEmails) {
         await sendAllMails(staffEmails, clientEmails, clientEmails.length);
        
         // Wait a bit....
-        await sleep(10000);
+        await utils.sleep(10000);
        
         return false;
     }

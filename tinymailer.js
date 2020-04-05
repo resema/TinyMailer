@@ -59,8 +59,7 @@ async function main() {
     staffEmails.addresses = staffList.addresses;
 
     let timeSpan = timing.getInitialSpan();
-    var isRunning = true;
-    while(isRunning) {
+    while(timeSpan.isRunning) {
         polling.getClassClients(isClassFound, youtube)
         .then(emailList => {
             // fill white list with new email addresses
@@ -101,7 +100,7 @@ async function main() {
     let isFinished = false;
     while(!isFinished) {
         // Get new link
-        isFinished = await messaging.resendLink(staffEmails, blackList);
+        isFinished = await messaging.resendLink(staffEmails, blackList, youtube);
     }
     
     gui.byebye();

@@ -1,14 +1,14 @@
 "use strict";
 const flags = {
     // Dev flags
-    DEV: false,
-    CONSOLE_ACTIVE: false,
+    DEV: true,
+    CONSOLE_ACTIVE: true,
     TIMEWARP_ACTIVE: false,
 
     // Going live flags
     MAILING_ACTIVE: false,
-    POOLING_ACTIVE: true,
-    CONFIGURATION_ACTIVE: true,
+    POOLING_ACTIVE: false,
+    CONFIGURATION_ACTIVE: false,
 
     // Theme flag
     DARKTHEME_ACTIVE: true

@@ -4,6 +4,7 @@ const theme = require('./colortheme');
 
 // Pooling time span
 const timeSpan = {
+    isRunning: true,
     milliseconds: 10000,
     counter: 0
 };
@@ -14,7 +15,7 @@ function getInitialSpan() {
 }
 
 // Get actual timespan or terminate app
-function getTimeSpan(isClassFound) {
+function getTimeSpan(isClassFound) {    
     // increase counter
     timeSpan.counter++;
 
@@ -27,8 +28,8 @@ function getTimeSpan(isClassFound) {
     }
     var diffMin = Math.floor(curTime - isClassFound.startDate)/1000/60;
 
-    if(diffMin > 2) {
-        isRunning = false;
+    if(diffMin > 1) {
+        timeSpan.isRunning = false;
     }
     else if(diffMin <= -20) {
         timeSpan.milliseconds = 300000;     // +20min before class

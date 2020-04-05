@@ -68,22 +68,22 @@ function showClassInfo(classData, curClass, youtube) {
 
 // Show new link info
 function showNewLink(emails) {
-    if(!CONSOLE_ACTIVE) {
+    if(!flags.CONSOLE_ACTIVE) {
         console.clear();
     }
     console.log(theme.bar(  '**********************************************************'));
-    console.log(theme.title('Resend emails with new link? - ') + italic('To quit press \"Ctrl + C\"'));
+    console.log(theme.title('Resend emails with new link? - ') + theme.italic('To quit press \"Ctrl + C\"'));
     console.log(theme.bar(  '**********************************************************'));
     console.log(emails);
 }
 
 // Get new link
-async function getNewLink() {
+async function getNewLink(youtube) {
     let newLink = await prompts({
         type: 'text',
         name: 'link',
-        message: 'Enter a new YouTube link:',
-        initial: '',
+        message: 'Enter a new YouTube link or resend same link:',
+        initial: youtube.link,
         validate: link => link.match(/http/i) ? true : 'Not valid input'
     });
 
