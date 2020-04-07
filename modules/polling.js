@@ -131,7 +131,7 @@ function getClassClients(classData, youtube)
             };
 
             gui.showClassInfo(classData, fakeClass, youtube);
-            let fakeEmails = ['renato.semadeni@gmail.com', 'jibbar@gmx.ch'];
+            let fakeEmails = ['jibbar@gmx.ch'];
             resolve(fakeEmails);
         }
     });

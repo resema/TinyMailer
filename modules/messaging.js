@@ -28,7 +28,7 @@ function getMailInformation(youtube) {
     let mailData = utils.readJSON('./email/metadata.json');
     mailInfo.address = mailData.emailaddress;
     mailInfo.subject = mailData.subject;
-    mailInfo.plaintext = mailData.plaintext;
+    mailInfo.plaintext = mailData.plaintext.replace(/YOUTUBE_LINK/g, youtube);
     mailInfo.htmltext = createMessage(youtube);
 }
 
@@ -51,31 +51,34 @@ function sendMail(whiteList)
         }
     });
 
-    let message = {
-        from: mailInfo.address, // sender address
-        bcc: whiteList.join(', '), // list of receivers
-        subject: mailInfo.subject, // Subject line
-        text: mailInfo.plaintext, // plain text body
-        html: mailInfo.htmltext
-    };
-
     return new Promise((resolve,reject) => {
-        if(whiteList.length == 0) {
-            if(flags.DEV) {
-                reject(theme.error('No new users!'));                
-            }
-            reject();
-        } else {
-            if(flags.MAILING_ACTIVE) {
-                transporter.sendMail(message).then(info => {
-                        // console.log(info);
-                        resolve(whiteList);
-                }).catch(err => reject(err));
+        whiteList.forEach(function(to) {
+            // create message
+            let message = {
+                from: mailInfo.address, // sender address
+                to: to, // list of receivers
+                subject: mailInfo.subject, // Subject line
+                text: mailInfo.plaintext, // plain text body
+                html: mailInfo.htmltext
+            };
+
+            if(whiteList.length == 0) {
+                if(flags.DEV) {
+                    reject(theme.error('No new users!'));                
+                }
+                reject();
             } else {
-                // No mailing
-                resolve(whiteList);
+                if(flags.MAILING_ACTIVE) {
+                    transporter.sendMail(message).then(info => {
+                            // console.log(info);
+                            resolve(whiteList);
+                    }).catch(err => reject(err));
+                } else {
+                    // No mailing
+                    resolve(whiteList);
+                }
             }
-        }
+        });
     });
 }
 
@@ -146,7 +149,7 @@ async function resendLink(staffEmails, clientEmails, youtube) {
         await sendAllMails(staffEmails, resendEmails, resendEmails.length);
        
         // Wait a bit....
-        await utils.sleep(3000);
+        await utils.sleep(5000);
        
         return false;
     }

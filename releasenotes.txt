@@ -6,3 +6,6 @@ v1.0.1.0 - Stopping after some time
 v1.1.0.0 - Possibility to resend emails after class start
 v1.1.0.1 - Address Bug
 v1.1.1.1 - Color theme added
+v2.0.0.0 - Modules for each logic part
+v2.1.0.0 - Sending a personal email to each client
+v2.2.0.0 - Link hidden behind 'click here'
