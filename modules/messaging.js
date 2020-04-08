@@ -17,6 +17,12 @@ const mailInfo = {
 // Authenthication information
 let authInfo;
 
+// Client informations
+function Client() {
+    this.name = '';
+    this.email =  '';
+}
+
 // Create HTML message
 function createMessage(youtube) {
     let message = utils.readHTML('./email/message.html');
@@ -52,14 +58,14 @@ function sendMail(whiteList)
     });
 
     return new Promise((resolve,reject) => {
-        whiteList.forEach(function(to) {
+        whiteList.forEach(function(client) {
             // create message
             let message = {
                 from: mailInfo.address, // sender address
-                to: to, // list of receivers
+                to: client.email, // list of receivers
                 subject: mailInfo.subject, // Subject line
                 text: mailInfo.plaintext, // plain text body
-                html: mailInfo.htmltext
+                html: mailInfo.htmltext.replace(/VORNAME/g, client.name)
             };
 
             if(whiteList.length == 0) {
@@ -83,15 +89,15 @@ function sendMail(whiteList)
 }
 
 // Send mails to staff and clients
-async function sendAllMails(staffEmails, clientEmails, nbrOfMailsSent) {
+async function sendAllMails(staff, clients) {
     // Send mails to staff first
-    if(!staffEmails.status) {
-        staffEmails.status = true;
-        sendMail(staffEmails.addresses)
-        .then(staffEmails => {
-            console.log(theme.italic('Staff mails sent: ') + staffEmails.length);
+    if(!staff.status) {
+        staff.status = true;
+        sendMail(staff.addresses)
+        .then(staff => {
+            console.log(theme.italic('Staff mails sent: ') + staff.length);
             if(flags.DEV) {
-                console.log(staffEmails)
+                console.log(staff)
             }
         })
         .catch(err => {
@@ -101,11 +107,9 @@ async function sendAllMails(staffEmails, clientEmails, nbrOfMailsSent) {
         });
     }
     // Send mails to clients
-    sendMail(clientEmails)
-    .then(sentEmails => {
-        console.log(sentEmails)
-        console.log(theme.italic('Current sent mails: ') + sentEmails.length);
-        console.log('Total sent mails: ' + nbrOfMailsSent);
+    sendMail(clients)
+    .then(sentClients => {
+        gui.showClientInfo(clients);
     })
     .catch(err => {
         if(flags.DEV) {
@@ -115,7 +119,7 @@ async function sendAllMails(staffEmails, clientEmails, nbrOfMailsSent) {
 }
 
 // Resend Link, returns true if user wants to exit
-async function resendLink(staffEmails, clientEmails, youtube) {
+async function resendLink(staff, clients, youtube) {
     // get the new link
     let sendInfo = await gui.getNewLinkAndToWho(youtube);
     getMailInformation(sendInfo.link);
@@ -125,28 +129,31 @@ async function resendLink(staffEmails, clientEmails, youtube) {
         youtube.link = sendInfo.link;
 
         // Resend staff and client mails
-        let resendEmails = [];
+        let resend = [];
         if(sendInfo.who == undefined) {
             return false;
         } else if(sendInfo.who == 0) {
-            staffEmails.status = false;
-            resendEmails = clientEmails;
+            staff.status = false;
+            resend = clients;
         } else if(sendInfo.who == 'N' || sendInfo.who == 'n') {
             let newEmails = await gui.getNewEmailAddresses();
-            if(newEmails.address == undefined) {
+            if(newEmails == undefined) {
                 return true;
             }
             for(let idx = 0; idx < newEmails.address.length; idx++) {
-                resendEmails.push(newEmails.address[idx]);
-                clientEmails.push(newEmails.address[idx]);
+                let client = new Client();
+                client.name = '';
+                client.email = newEmails.address[idx];
+                resend.push(client);
+                clients.push(client);
             }
         } else {
             for(let idx = 0; idx < sendInfo.who.length; idx++) {
                 let index = parseInt(sendInfo.who[idx])-1;
-                resendEmails.push(clientEmails[index]);
+                resend.push(clients[index]);
             }
         }
-        await sendAllMails(staffEmails, resendEmails, resendEmails.length);
+        await sendAllMails(staff, resend);
        
         // Wait a bit....
         await utils.sleep(5000);
@@ -157,6 +164,7 @@ async function resendLink(staffEmails, clientEmails, youtube) {
 }
 
 module.exports = {
+    Client: Client,
     getMailInformation: getMailInformation,
     setAuthentication: setAuthentication,
     sendMail: sendMail,

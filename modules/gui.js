@@ -5,7 +5,6 @@ const theme = require('./colortheme');
 const flags = require('./flags');
 const utils = require('./utils');
 
-
 // Show intro message and ask for link
 async function showIntroAndAskForLink() {
     let version = utils.readJSON('./version.json');
@@ -66,8 +65,16 @@ function showClassInfo(classData, curClass, youtube) {
     }
 }
 
+// Show all client information sent
+function showClientInfo(clients) {
+    for(let idx = 0; idx < clients.length; idx++) {
+        console.log('[' + theme.bold(idx+1) + ']' + '\t' 
+        + theme.green(clients[idx].name + '\t' + theme.green(clients[idx].email)));
+    }
+}
+
 // Show new link info
-function showNewLink(emails) {
+function showNewLink(clients) {
     if(!flags.CONSOLE_ACTIVE) {
         console.clear();
     }
@@ -77,9 +84,7 @@ function showNewLink(emails) {
     
     console.log('[' + theme.bold(0) + ']' + '\t' + theme.green('Complete list and staff'));
     console.log();
-    for(let idx = 0; idx < emails.length; idx++) {
-        console.log('[' + theme.bold(idx+1) + ']' + '\t' + theme.green(emails[idx]));
-    }
+    showClientInfo(clients);
     console.log();
     console.log('[' + theme.bold('N') + ']' + '\t' + theme.green('New email address'));
 }
@@ -128,7 +133,6 @@ async function getNewEmailAddresses() {
         message: 'Enter a new email address(es):',
         initial: ''
     });
-
     return newEmails;
 }
 
@@ -142,6 +146,7 @@ function byebye() {
 module.exports = {
     showIntroAndAskForLink: showIntroAndAskForLink,
     showClassInfo: showClassInfo,
+    showClientInfo: showClientInfo,
     showNewLink: showNewLink,
     getNewLinkAndToWho: getNewLinkAndToWho,
     getNewEmailAddresses: getNewEmailAddresses,

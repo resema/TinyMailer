@@ -9,3 +9,4 @@ v1.1.1.1 - Color theme added
 v2.0.0.0 - Modules for each logic part
 v2.1.0.0 - Sending a personal email to each client
 v2.2.0.0 - Link hidden behind 'click here'
+v2.3.0.0 - Mail with personal 'Hi Name'

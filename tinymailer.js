@@ -25,7 +25,7 @@ async function main() {
     };
 
     // Staff email addresses
-    const staffEmails = {
+    const staff = {
         status: false,
         addresses: []
     };
@@ -56,24 +56,23 @@ async function main() {
 
     // Read Staff List
     let staffList = utils.readJSON(filepath + 'staffList.json');
-    staffEmails.addresses = staffList.addresses;
+    staff.addresses = staffList.addresses;
+    console.log(staff);
 
     let timeSpan = timing.getInitialSpan();
     while(timeSpan.isRunning) {
         polling.getClassClients(isClassFound, youtube)
-        .then(emailList => {
-            // fill white list with new email addresses
-            // console.log(emailList);
+        .then(clients => {
+            // fill white list with new clients
             let whiteList = [];
-            for(let i = 0; i < emailList.length; i++) {
-                if(blackList.indexOf(emailList[i]) == -1) {
-                    // console.log(emailList[i]);
-                    blackList.push(emailList[i]);
-                    whiteList.push(emailList[i]);
+            for(let i = 0; i < clients.length; i++) {
+                if(blackList.indexOf(clients[i]) == -1) {
+                    blackList.push(clients[i]);
+                    whiteList.push(clients[i]);
                 }
             }
             // Send mails to staff and clients
-            messaging.sendAllMails(staffEmails, whiteList, blackList.length);
+            messaging.sendAllMails(staff, whiteList);
         })
         .catch(err => {
             if(flags.DEV) {
@@ -100,7 +99,7 @@ async function main() {
         gui.showNewLink(blackList);
 
         // Get new link
-        isFinished = await messaging.resendLink(staffEmails, blackList, youtube);
+        isFinished = await messaging.resendLink(staff, blackList, youtube);
     }
     
     gui.byebye();

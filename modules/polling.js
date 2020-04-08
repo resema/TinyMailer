@@ -3,6 +3,7 @@ const MBO = require('mindbody-sdk');
 
 const flags = require('./flags');
 const gui = require('./gui');
+const messaging = require('./messaging');
 
 // Authentication information
 let authInfo;
@@ -34,18 +35,21 @@ function getClassClients(classData, youtube)
                 if(data.Clients.length == 0) {
                     reject('No clients in class found!');
                 } else {
-                    var emails = [];
+                    let clients = [];
                     var idx = 0;
                     for (let i = 0; i < data.Clients.length; i++)
                     {
                         if(data.Clients[i].Email != null) {
-                            emails[idx] = data.Clients[i].Email;
+                            let client = new messaging.Client();
+                            client.name = data.Clients[i].FirstName;
+                            client.email = data.Clients[i].Email;
+                            clients.push(client);
                             idx++;
                         } else {
                             console.log(warning('Client ' + italic.blueBright(data.Clients[i].LastName + ', ' + data.Clients[i].FirstName) + ' has no email!'));
                         }
                     }
-                    resolve(emails);
+                    resolve(clients);
                 }
             }
         }
@@ -131,8 +135,11 @@ function getClassClients(classData, youtube)
             };
 
             gui.showClassInfo(classData, fakeClass, youtube);
-            let fakeEmails = ['jibbar@gmx.ch'];
-            resolve(fakeEmails);
+            let fakeClient = new messaging.Client();
+            fakeClient.name = 'Smii';
+            fakeClient.email = 'jibbar@gmx.ch';
+            let clients = [fakeClient];
+            resolve(clients);
         }
     });
 }
