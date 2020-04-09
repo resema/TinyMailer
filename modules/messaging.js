@@ -19,7 +19,9 @@ let authInfo;
 
 // Client informations
 function Client() {
-    this.name = '';
+    this.id = '';
+    this.firstname = '';
+    this.lastname = '';
     this.email =  '';
 }
 

@@ -66,7 +66,7 @@ async function main() {
             // fill white list with new clients
             let whiteList = [];
             for(let i = 0; i < clients.length; i++) {
-                if(blackList.indexOf(clients[i]) == -1) {
+                if(!utils.containsObject(clients[i], blackList)) {
                     blackList.push(clients[i]);
                     whiteList.push(clients[i]);
                 }

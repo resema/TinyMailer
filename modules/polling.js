@@ -41,7 +41,9 @@ function getClassClients(classData, youtube)
                     {
                         if(data.Clients[i].Email != null) {
                             let client = new messaging.Client();
-                            client.name = data.Clients[i].FirstName;
+                            client.id = data.Clients[i].Id;
+                            client.firstname = data.Clients[i].FirstName;
+                            client.lastname = data.Clients[i].LastName;
                             client.email = data.Clients[i].Email;
                             clients.push(client);
                             idx++;

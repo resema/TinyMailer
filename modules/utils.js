@@ -42,9 +42,21 @@ function readHTML(filename) {
     return file;
 }
 
+// Helper function to check if object is already in list
+function containsObject(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if (list[i].id === obj.id) {
+            return true;
+        }
+    }
+    return false;
+}
+
 module.exports = {
     sleep: sleep,
     getFilepath: getFilepath,
     readJSON: readJSON,
-    readHTML: readHTML
+    readHTML: readHTML,
+    containsObject: containsObject
 }

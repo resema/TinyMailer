@@ -68,8 +68,9 @@ function showClassInfo(classData, curClass, youtube) {
 // Show all client information sent
 function showClientInfo(clients) {
     for(let idx = 0; idx < clients.length; idx++) {
+        const clientName = clients[idx].firstname + ' ' + clients[idx].lastname;
         console.log('[' + theme.bold(idx+1) + ']' + '\t' 
-        + theme.green(clients[idx].name + '\t' + theme.green(clients[idx].email)));
+        + theme.green(clientName.padEnd(30) + theme.green(clients[idx].email)));
     }
 }
 
