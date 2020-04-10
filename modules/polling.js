@@ -129,8 +129,8 @@ function getClassClients(classData, youtube)
         } else {
             // Fake Pooling
             let fakeClass = { 
-                StartDateTime: new Date('April 5 2020 06:07'),
-                EndDateTime: new Date('April 5 2020 06:30'),
+                StartDateTime: new Date('April 9 2020 22:53'),
+                EndDateTime: new Date('April 9 2020 23:30'),
                 ClassDescription: {
                     Name: 'Zumba'
                 }
@@ -138,8 +138,8 @@ function getClassClients(classData, youtube)
 
             gui.showClassInfo(classData, fakeClass, youtube);
             let fakeClient = new messaging.Client();
-            fakeClient.name = 'Smii';
-            fakeClient.email = 'jibbar@gmx.ch';
+            fakeClient.firstname = 'Renato';
+            fakeClient.email = 'renato.semadeni@gmail.com';
             let clients = [fakeClient];
             resolve(clients);
         }

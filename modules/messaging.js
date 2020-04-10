@@ -67,7 +67,7 @@ function sendMail(whiteList)
                 to: client.email, // list of receivers
                 subject: mailInfo.subject, // Subject line
                 text: mailInfo.plaintext, // plain text body
-                html: mailInfo.htmltext.replace(/VORNAME/g, client.name)
+                html: mailInfo.htmltext.replace(/VORNAME/g, client.firstname)
             };
 
             if(whiteList.length == 0) {
@@ -146,8 +146,8 @@ async function resendLink(staff, clients, youtube) {
                 let client = new Client();
                 // Create unique id
                 client.id = new Date().valueOf();
-                client.firstname = 'manually';
-                client.lastname = 'added';
+                client.firstname = '';
+                client.lastname = 'manually added';
                 client.email = newEmails.address[idx];
                 resend.push(client);
                 clients.push(client);
