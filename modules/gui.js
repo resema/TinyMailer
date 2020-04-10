@@ -8,6 +8,11 @@ const utils = require('./utils');
 // Global counter for sent emails
 var cntr = 0;
 
+// Reset global counter
+function resetGlobalCounter() {
+    cntr = 0;
+}
+
 // Show intro message and ask for link
 async function showIntroAndAskForLink() {
     let version = utils.readJSON('./version.json');
@@ -88,6 +93,10 @@ function showNewLink(clients) {
     console.log(theme.title('Resend emails with new link? - ') + theme.italic('To quit press \"Ctrl + C\"'));
     console.log(theme.bar(  '**********************************************************'));
     
+    // Reset Counter
+    resetGlobalCounter();
+    
+    // Print client list
     console.log('[' + theme.bold(0) + ']' + '\t' + theme.green('Complete list and staff'));
     console.log();
     showClientInfo(clients);

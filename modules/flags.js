@@ -2,11 +2,11 @@
 const flags = {
     // Dev flags
     DEV: false,
-    CONSOLE_ACTIVE: true,
+    CONSOLE_ACTIVE: false,
     TIMEWARP_ACTIVE: false,
 
     // Going live flags
-    MAILING_ACTIVE: false,
+    MAILING_ACTIVE: true,
     POOLING_ACTIVE: true,
     CONFIGURATION_ACTIVE: true,
 

@@ -12,3 +12,4 @@ v2.2.0.0 - Link hidden behind 'click here'
 v2.3.0.0 - Mail with personal 'Hi Name'
 v2.3.0.1 - Bugfix resending mails
 v2.3.0.2 - Bugfix showing staff list and counter
+v2.3.0.3 - Bugfix show new link with counter beginning at 0
