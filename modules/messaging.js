@@ -144,7 +144,10 @@ async function resendLink(staff, clients, youtube) {
             }
             for(let idx = 0; idx < newEmails.address.length; idx++) {
                 let client = new Client();
-                client.name = '';
+                // Create unique id
+                client.id = new Date().valueOf();
+                client.firstname = 'manually';
+                client.lastname = 'added';
                 client.email = newEmails.address[idx];
                 resend.push(client);
                 clients.push(client);
