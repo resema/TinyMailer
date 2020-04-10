@@ -95,9 +95,9 @@ async function sendAllMails(staff, clients) {
     // Send mails to staff first
     if(!staff.status) {
         staff.status = true;
+        console.log(theme.italic('Staff mails sent: ') + staff.addresses.length);
         sendMail(staff.addresses)
         .then(staff => {
-            console.log(theme.italic('Staff mails sent: ') + staff.length);
             if(flags.DEV) {
                 console.log(staff)
             }

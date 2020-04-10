@@ -2,7 +2,7 @@
 const flags = {
     // Dev flags
     DEV: false,
-    CONSOLE_ACTIVE: false,
+    CONSOLE_ACTIVE: true,
     TIMEWARP_ACTIVE: false,
 
     // Going live flags
