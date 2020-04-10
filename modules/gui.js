@@ -5,6 +5,9 @@ const theme = require('./colortheme');
 const flags = require('./flags');
 const utils = require('./utils');
 
+// Global counter for sent emails
+var cntr = 0;
+
 // Show intro message and ask for link
 async function showIntroAndAskForLink() {
     let version = utils.readJSON('./version.json');
@@ -68,8 +71,10 @@ function showClassInfo(classData, curClass, youtube) {
 // Show all client information sent
 function showClientInfo(clients) {
     for(let idx = 0; idx < clients.length; idx++) {
+        // increase global counter
+        cntr++;
         const clientName = clients[idx].firstname + ' ' + clients[idx].lastname;
-        console.log('[' + theme.bold(idx+1) + ']' + '\t' 
+        console.log('[' + theme.bold(cntr) + ']' + '\t' 
         + theme.green(clientName.padEnd(30) + theme.green(clients[idx].email)));
     }
 }

@@ -57,7 +57,6 @@ async function main() {
     // Read Staff List
     let staffList = utils.readJSON(filepath + 'staffList.json');
     staff.addresses = staffList.addresses;
-    console.log(staff);
 
     let timeSpan = timing.getInitialSpan();
     while(timeSpan.isRunning) {
