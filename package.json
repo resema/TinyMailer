@@ -1,0 +1,31 @@
+{
+  "name": "tinymailer",
+  "version": "2.3.0",
+  "description": "MindbodyOnline visits crawler and mail sender",
+  "main": "tinymailer.js",
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "mindbody-sdk": "^1.0.3",
+    "nodemailer": "^6.4.6",
+    "prompts": "^2.3.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/resema/TinyMailer.git"
+  },
+  "keywords": [
+    "MindbodyOnline",
+    "Mail",
+    "Link"
+  ],
+  "author": "resema",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/resema/TinyMailer/issues"
+  },
+  "homepage": "https://github.com/resema/TinyMailer#readme"
+}
