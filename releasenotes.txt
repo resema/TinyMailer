@@ -14,3 +14,4 @@ v2.3.0.1 - Bugfix resending mails
 v2.3.0.2 - Bugfix showing staff list and counter
 v2.3.0.3 - Bugfix show new link with counter beginning at 0
 v2.4.0.0 - Email contains the class name and its starting date in the subject and text.
+v2.4.1.0 - Email subject different format and new time format option.
