@@ -31,6 +31,13 @@ function createMessage(youtube) {
     return message.replace(/YOUTUBE_LINK/g, youtube);
 }
 
+// Replace fields in email
+function replaceFieldsInMail(curClass) {
+    let startDateAndTime = curClass.startDate.toLocaleString().split('T');
+    mailInfo.subject = mailInfo.subject.concat(' - ', curClass.classDescription, ' - ' , startDateAndTime);
+    mailInfo.htmltext = mailInfo.htmltext.replace(/CLASSNAME/g, curClass.classDescription);
+}
+
 // Get Mail info
 function getMailInformation(youtube) {
     let mailData = utils.readJSON('./email/metadata.json');
@@ -171,6 +178,7 @@ async function resendLink(staff, clients, youtube) {
 module.exports = {
     Client: Client,
     getMailInformation: getMailInformation,
+    replaceFieldsInMail: replaceFieldsInMail,
     setAuthentication: setAuthentication,
     sendMail: sendMail,
     sendAllMails: sendAllMails,

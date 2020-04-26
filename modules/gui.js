@@ -40,6 +40,7 @@ function showClassInfo(classData, curClass, youtube) {
     if(!classData.status) {
         classData.status = true;
         classData.classId = curClass.Id;
+        classData.classDescription = curClass.ClassDescription.Name;
         classData.startDate = new Date(curClass.StartDateTime);
 
         let startDateAndTime = curClass.StartDateTime.toLocaleString().split('T');
@@ -49,7 +50,7 @@ function showClassInfo(classData, curClass, youtube) {
             console.clear();
         }
         console.log(theme.bar('**********************************************************'));
-        console.log(theme.title('Actual class: \t\t') + curClass.ClassDescription.Name);
+        console.log(theme.title('Actual class: \t\t') + classData.classDescription);
         console.log(theme.title('Start time: \t\t') + startDateAndTime[0] + ', ' + startDateAndTime[1]);
         console.log(theme.title('End time: \t\t') + endDateAndTime[0] + ', ' + endDateAndTime[1]);
         console.log();

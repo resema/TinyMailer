@@ -17,7 +17,8 @@ async function main() {
     const isClassFound = { 
         status: false,
         classId: -1,
-        startDate: new Date() 
+        classDescription: '',
+        startDate: new Date()
     };
     // Info message box
     const isInfoShowed = {
@@ -70,6 +71,10 @@ async function main() {
                     whiteList.push(clients[i]);
                 }
             }
+
+            // Set class name in email
+            messaging.replaceFieldsInMail(isClassFound);
+
             // Send mails to staff and clients
             messaging.sendAllMails(staff, whiteList);
         })
