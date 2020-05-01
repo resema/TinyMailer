@@ -33,8 +33,8 @@ function createMessage(youtube) {
 
 // Replace fields in email
 function replaceFieldsInMail(curClass) {
-    var options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}
-    let startDateAndTime = curClass.startDate.toLocaleString('de-DE', options).split('T');
+    let options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}
+    let startDateAndTime = curClass.startDate.toLocaleString('de-CH', options);
     mailInfo.subject = mailInfo.subject.concat(' - ', curClass.classDescription, ', ' , startDateAndTime);
     mailInfo.htmltext = mailInfo.htmltext.replace(/CLASSNAME/g, curClass.classDescription);
 }
