@@ -122,9 +122,7 @@ async function sendAllMails(staff, clients) {
         gui.showClientInfo(clients);
     })
     .catch(err => {
-        if(flags.DEV) {
-            console.log(theme.error('Client email sending failed: ') + err);
-        }
+        console.log(theme.error('Client email sending failed: ') + err);
     });
 }
 
