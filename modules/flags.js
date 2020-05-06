@@ -7,8 +7,8 @@ const flags = {
 
     // Going live flags
     MAILING_ACTIVE: true,
-    POOLING_ACTIVE: false,
-    CONFIGURATION_ACTIVE: false,
+    POOLING_ACTIVE: true,
+    CONFIGURATION_ACTIVE: true,
 
     // Theme flag
     DARKTHEME_ACTIVE: true

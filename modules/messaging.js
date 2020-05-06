@@ -17,20 +17,13 @@ const mailInfo = {
 // Authenthication information
 let authInfo;
 
-// Client informations
-function Client() {
-    this.id = '';
-    this.firstname = '';
-    this.lastname = '';
-    this.email =  '';
-}
-
 // Create HTML message
-function createMessage(youtube) {
+function createMessage(link) {
     let message = utils.readHTML('./email/message.html');
-    return message.replace(/YOUTUBE_LINK/g, youtube);
+    return message.replace(/YOUTUBE_LINK/g, link);
 }
 
+// CLI
 // Replace fields in email
 function replaceFieldsInMail(curClass) {
     let options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}
@@ -39,6 +32,7 @@ function replaceFieldsInMail(curClass) {
     mailInfo.htmltext = mailInfo.htmltext.replace(/CLASSNAME/g, curClass.classDescription);
 }
 
+// CLI
 // Get Mail info
 function getMailInformation(youtube) {
     let mailData = utils.readJSON('./email/metadata.json');
@@ -48,13 +42,29 @@ function getMailInformation(youtube) {
     mailInfo.htmltext = createMessage(youtube);
 }
 
+// Creates Mail info and returns it
+function createMailInformation(youtube, classModel) {
+    let mailData = utils.readJSON('./email/metadata.json');
+    mailInfo.address = mailData.emailaddress;
+    mailInfo.subject = mailData.subject;
+    mailInfo.plaintext = mailData.plaintext.replace(/YOUTUBE_LINK/g, youtube);
+    mailInfo.htmltext = createMessage(youtube);
+
+    let options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}
+    let startDateAndTime = classModel.startDate.toLocaleString('de-CH', options);
+    mailInfo.subject = mailInfo.subject.concat(' - ', classModel.name, ', ' , startDateAndTime);
+    mailInfo.htmltext = mailInfo.htmltext.replace(/CLASSNAME/g, classModel.name);
+
+    return mailInfo;
+}
+
 // Set authentication information
 function setAuthentication(info) {
     authInfo = info;
 }
 
 // send mail with defined transport object
-function sendMail(whiteList)
+function sendMail(addresses, cli = false)
 {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
@@ -68,43 +78,48 @@ function sendMail(whiteList)
     });
 
     return new Promise((resolve,reject) => {
-        whiteList.forEach(function(client) {
+        addresses.forEach(function(client) {
             // create message
             let message = {
                 from: mailInfo.address, // sender address
-                to: client.email, // list of receivers
+                to: client.emailaddr, // list of receivers
                 subject: mailInfo.subject, // Subject line
                 text: mailInfo.plaintext, // plain text body
                 html: mailInfo.htmltext.replace(/VORNAME/g, client.firstname)
             };
 
-            if(whiteList.length == 0) {
+            if(addresses.length == 0) {
                 if(flags.DEV) {
                     reject(theme.error('No new users!'));                
                 }
-                reject();
+                reject('There was a problem!');
             } else {
                 if(flags.MAILING_ACTIVE) {
-                    transporter.sendMail(message).then(info => {
-                            // console.log(info);
-                            resolve(whiteList);
-                    }).catch(err => reject(err));
+                    transporter.sendMail(message)
+                    .then(info => {
+                        if (!cli) {
+                            console.log(info);
+                        }
+                        resolve(addresses);
+                    })
+                    .catch(err => reject(err));
                 } else {
                     // No mailing
-                    resolve(whiteList);
+                    resolve(addresses);
                 }
             }
         });
     });
 }
 
+// CLI
 // Send mails to staff and clients
-async function sendAllMails(staff, clients) {
+async function sendAllMails(staff, clients, cli = false) {
     // Send mails to staff first
     if(!staff.status) {
         staff.status = true;
         console.log(theme.italic('Staff mails sent: ') + staff.addresses.length);
-        sendMail(staff.addresses)
+        sendMail(staff.addresses, cli)
         .then(staff => {
             if(flags.DEV) {
                 console.log(staff)
@@ -117,7 +132,7 @@ async function sendAllMails(staff, clients) {
         });
     }
     // Send mails to clients
-    sendMail(clients)
+    sendMail(clients, cli)
     .then(sentClients => {
         gui.showClientInfo(clients);
     })
@@ -126,6 +141,7 @@ async function sendAllMails(staff, clients) {
     });
 }
 
+// CLI
 // Resend Link, returns true if user wants to exit
 async function resendLink(staff, clients, youtube) {
     // get the new link
@@ -164,7 +180,7 @@ async function resendLink(staff, clients, youtube) {
                 resend.push(clients[index]);
             }
         }
-        await sendAllMails(staff, resend);
+        await sendAllMails(staff, resend, true);
        
         // Wait a bit....
         await utils.sleep(5000);
@@ -175,10 +191,10 @@ async function resendLink(staff, clients, youtube) {
 }
 
 module.exports = {
-    Client: Client,
+    createMailInformation: createMailInformation,
     getMailInformation: getMailInformation,
-    replaceFieldsInMail: replaceFieldsInMail,
     setAuthentication: setAuthentication,
+    replaceFieldsInMail: replaceFieldsInMail,
     sendMail: sendMail,
     sendAllMails: sendAllMails,
     resendLink: resendLink

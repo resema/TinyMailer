@@ -81,7 +81,7 @@ function showClientInfo(clients) {
         cntr++;
         const clientName = clients[idx].firstname + ' ' + clients[idx].lastname;
         console.log('[' + theme.bold(cntr) + ']' + '\t' 
-        + theme.green(clientName.padEnd(30) + theme.green(clients[idx].email)));
+        + theme.green(clientName.padEnd(30) + theme.green(clients[idx].emailaddr)));
     }
 }
 
