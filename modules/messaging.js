@@ -32,7 +32,6 @@ function replaceFieldsInMail(curClass) {
     mailInfo.htmltext = mailInfo.htmltext.replace(/CLASSNAME/g, curClass.classDescription);
 }
 
-// CLI
 // Get Mail info
 function getMailInformation(youtube) {
     let mailData = utils.readJSON('./email/metadata.json');
@@ -40,6 +39,8 @@ function getMailInformation(youtube) {
     mailInfo.subject = mailData.subject;
     mailInfo.plaintext = mailData.plaintext.replace(/YOUTUBE_LINK/g, youtube);
     mailInfo.htmltext = createMessage(youtube);
+
+    return mailInfo;
 }
 
 // Creates Mail info and returns it
@@ -50,8 +51,9 @@ function createMailInformation(youtube, classModel) {
     mailInfo.plaintext = mailData.plaintext.replace(/YOUTUBE_LINK/g, youtube);
     mailInfo.htmltext = createMessage(youtube);
 
+    let classDate = new Date(classModel.startDate);
     let options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}
-    let startDateAndTime = classModel.startDate.toLocaleString('de-CH', options);
+    let startDateAndTime = classDate.toLocaleString('de-CH', options);
     mailInfo.subject = mailInfo.subject.concat(' - ', classModel.name, ', ' , startDateAndTime);
     mailInfo.htmltext = mailInfo.htmltext.replace(/CLASSNAME/g, classModel.name);
 
@@ -64,7 +66,7 @@ function setAuthentication(info) {
 }
 
 // send mail with defined transport object
-function sendMail(addresses, cli = false)
+function sendMails(addresses, cli = false)
 {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
@@ -119,7 +121,7 @@ async function sendAllMails(staff, clients, cli = false) {
     if(!staff.status) {
         staff.status = true;
         console.log(theme.italic('Staff mails sent: ') + staff.addresses.length);
-        sendMail(staff.addresses, cli)
+        sendMails(staff.addresses, cli)
         .then(staff => {
             if(flags.DEV) {
                 console.log(staff)
@@ -132,7 +134,7 @@ async function sendAllMails(staff, clients, cli = false) {
         });
     }
     // Send mails to clients
-    sendMail(clients, cli)
+    sendMails(clients, cli)
     .then(sentClients => {
         gui.showClientInfo(clients);
     })
@@ -195,7 +197,7 @@ module.exports = {
     getMailInformation: getMailInformation,
     setAuthentication: setAuthentication,
     replaceFieldsInMail: replaceFieldsInMail,
-    sendMail: sendMail,
+    sendMails: sendMails,
     sendAllMails: sendAllMails,
     resendLink: resendLink
 }

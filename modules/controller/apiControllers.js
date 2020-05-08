@@ -6,6 +6,8 @@ const polling = require('../polling');
 const messaging = require('../messaging');
 const theme = require('../colortheme');
 const ClientModel = require('../../models/clientModel');
+const ClassModel = require('../../models/classModel');
+const database = require('../db/nosql')
 
 module.exports = function(app) {
 
@@ -28,21 +30,45 @@ module.exports = function(app) {
 
     // get clients in class with id
     app.get('/api/class/:id', function(req, res) {
-        // return the specific class as JSON
+        // poll all clients of the class
         let clients = [];
         polling.getAllClientsByClassID(req.params.id, clients)
-        .then((suc) => {
+        .then(_ => {
             res.send(clients);
         })
-        .catch((err) => {
+        .catch(err => {
             console.log(theme.error(err));
-            res.send(err);
-        })
+        });        
     });
+
+    // get clients in class with id
+    app.get('/api/class-db/:id', function(req, res) {
+        // poll all clients of the class
+        let clients = [];
+        clients = database.getAllClients(parseInt(req.params.id));
+        if (!clients) {
+            clients = [];
+        }
+        res.send(clients);        
+    });
+
+    // get raw message body
+    app.get('/api/message', function(req, res) {
+        let message = messaging.getMailInformation('YOUTUBE_LINK');
+        res.send(message);
+    })
 
     // create message containing a link
     app.post('/api/message', function(req, res) {
-        let message = messaging.createMailInformation(req.body.youtube.link, req.body.classModel);
+        const link = req.body.link.link;
+        const obj = req.body.selClass;
+        let selClass = new ClassModel(true,
+                                      obj.id,
+                                      obj.name,
+                                      obj.startDate,
+                                      obj.startDate + 1,
+                                      obj.clients);
+        let message = messaging.createMailInformation(link, selClass);
         res.send(message);
     });
 
@@ -58,7 +84,7 @@ module.exports = function(app) {
                     );
         addresses.push(client);
 
-        messaging.sendMail(addresses)
+        messaging.sendMails(addresses)
         .then(suc => {
             res.send(suc);
         })
@@ -79,7 +105,7 @@ module.exports = function(app) {
                         );
             addresses.push(client);
         });
-        messaging.sendMail(addresses)
+        messaging.sendMails(addresses)
         .then(suc => {
             res.send(suc);
         })

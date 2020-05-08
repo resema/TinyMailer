@@ -10,7 +10,8 @@
     "express": "^4.17.1",
     "mindbody-sdk": "^1.0.3",
     "nodemailer": "^6.4.6",
-    "prompts": "^2.3.2"
+    "prompts": "^2.3.2",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {},
   "scripts": {

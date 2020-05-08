@@ -25,15 +25,14 @@ function getAllClasses(classes)
             SiteId: authInfo.siteId
         });
 
-        // Get current date and time
-        // @todo rensem->rensem: de-CH
+        // Get current date and time for polling
         var europeTime = new Date().toLocaleString("en-US");
         let date = new Date(europeTime).toISOString().split('.')[0];
 
         // Callback to get all Clients from Class 
         let findClass = (err,data) => {
             if (err) {
-                reject(err);
+                reject('findClass: ' + err);
             } else {
                 // Find all class
                 if(data.Classes.length > 0) {
@@ -47,7 +46,7 @@ function getAllClasses(classes)
                         classes.push(classModel);
                     }
                     resolve('Success')
-                } else {                 
+                } else {    
                     reject('findClass: No classes found');
                 }
             }
@@ -59,7 +58,7 @@ function getAllClasses(classes)
                 'StartDateTime': date,
                 'HideCanceledClasses': true,
                 'SchedulingWindow': false
-            },findClass);
+            },findClass)
         } else {
             // Fake Pooling
             let fakeClass = new ClassModel(
@@ -117,7 +116,7 @@ function getAllClientsByClassID(id, clients)
                                                 data.Clients[i].Email);
                             clients.push(clientModel);
                         } else {
-                            console.log(warning('Client ' + italic.blueBright(data.Clients[i].LastName + ', ' + data.Clients[i].FirstName) + ' has no email!'));
+                            console.log(theme.warning('Client ' + theme.italic.blueBright(data.Clients[i].LastName + ', ' + data.Clients[i].FirstName) + ' has no email!'));
                         }
                     }
                     resolve('Success');
@@ -130,15 +129,19 @@ function getAllClientsByClassID(id, clients)
             if (err) {
                 reject(err);
             } else {
-                let ids = [];
-                for(let i = 0; i < data.Class.Visits.length; i++)
-                {
-                    ids[i] = data.Class.Visits[i].ClientId;
-                }
+                if (!data.Class) {
+                    reject('Something wrong with class');
+                } else {
+                    let ids = [];
+                    for(let i = 0; i < data.Class.Visits.length; i++)
+                    {
+                        ids[i] = data.Class.Visits[i].ClientId;
+                    }
 
-                mbo.client.clients({
-                    'ClientIds': ids
-                },returnEmails);
+                    mbo.client.clients({
+                        'ClientIds': ids
+                    },returnEmails);
+                }
             }
         }
 
@@ -151,8 +154,8 @@ function getAllClientsByClassID(id, clients)
             },findVisits);
         } else {
             // Fake Pooling
-            let fakeClient = new ClientModel(42, 'Tamara', 'Blösch', 't@b.me');
-            let fakeClient2 = new ClientModel(11, 'Dev', 'Eloper', 'd@e.me');
+            let fakeClient = new ClientModel(42, 'Tamara', 'Blösch', 'renato.semadeni@gmail.com');
+            let fakeClient2 = new ClientModel(11, 'Dev', 'Eloper', 'renato.semadeni@gmail.com');
             clients.push(fakeClient);
             clients.push(fakeClient2);
             resolve('FakeClient Success');

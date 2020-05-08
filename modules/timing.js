@@ -14,19 +14,32 @@ function getInitialSpan() {
     return timeSpan;
 }
 
+function calculateMin(date0, date1) {
+    const time0 = date0.split(', ')[1];
+    const time1 = date1.split(', ')[1];
+
+    const split0 = time0.split(':');
+    const split1 = time1.split(':');
+
+    const min0 = parseInt(split0[0]) * 60 + parseInt(split0[1]);
+    const min1 = parseInt(split1[0]) * 60 + parseInt(split1[1]);
+ 
+    return (min0 - min1);
+}
+
 // Get actual timespan or terminate app
 function getTimeSpan(isClassFound) {    
     // increase counter
     timeSpan.counter++;
 
     // Check if tinymailer can be terminated or time span adapted.
-    var europeTime = new Date().toLocaleString("en-US", {timeZone: "Europe/Berlin"});
-    var curTime = new Date(europeTime);
-    if(flags.DEV && !flags.CONFIGURATION_ACTIVE) {
-        var usTime = new Date().toLocaleString("en-US", {timeZone: "America/Los_Angeles"});
-        curTime = new Date(usTime);
-    }
-    var diffMin = Math.floor(curTime - isClassFound.startDate)/1000/60;
+    let options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}
+    var europeTime = Date.now();
+    var curTime = new Date(europeTime).toLocaleString("de-CH", options);;
+
+    // var diffMin = Math.floor(date1 - date2)/1000/60;
+    var diffMin = calculateMin(curTime, isClassFound.startDate)
+    console.log('diffMin: ' + diffMin);
 
     if(diffMin > 0.16) {
         timeSpan.isRunning = false;
@@ -41,7 +54,7 @@ function getTimeSpan(isClassFound) {
         timeSpan.milliseconds = 30000;      // +11min before class
     }
     else if(diffMin > -20) {
-        timeSpan.milliseconds = 60000;      // +20min before clas 
+        timeSpan.milliseconds = 60000;      // +20min before class
     }
 
     if(flags.DEV) {
