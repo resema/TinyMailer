@@ -46,6 +46,7 @@ async function run(io, selClass) {
             // print the infos
             if (flags.DEV) {
                 database.show(false);
+                console.log('Timespan: ' + timeSpan.milliseconds.toString());
             }
 
             // send Mails to new Clients
@@ -53,7 +54,6 @@ async function run(io, selClass) {
 
             // emit the ticktock
             io.emit('update', timeSpan.milliseconds.toString());
-            console.log('Timespan: ' + timeSpan.milliseconds.toString());
         })
         .catch((err) => { 
             console.log(theme.error(err))
