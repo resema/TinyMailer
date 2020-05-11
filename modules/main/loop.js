@@ -30,6 +30,15 @@ function prepare(io) {
 // start main loop
 async function run(io, selClass) {
     timeSpan.isRunning = true;
+    timeSpan = timing.getTimeSpan(selClass);
+
+    // Read Staff List
+    if(timeSpan.isRunning) {
+        const configPath = utils.getConfigFile();
+        let staffList = utils.readJSON(configPath + 'staffList.json');
+        messaging.sendMails(staffList.addresses)
+    }
+
     while(timeSpan.isRunning) {
         // poll all clients of the class
         let clients = [];

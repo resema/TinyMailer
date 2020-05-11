@@ -156,7 +156,7 @@ function getAllClientsByClassID(id, clients)
         } else {
             // Fake Pooling
             let fakeClient = new ClientModel(42, 'Tamara', 'Blösch', 'renato.semadeni@gmail.com');
-            let fakeClient2 = new ClientModel(11, 'Dev', 'Eloper', 'renato.semadeni@gmail.com');
+            let fakeClient2 = new ClientModel(11, 'Renato', 'Semadeni', 'renato.semadeni@gmail.com');
             clients.push(fakeClient);
             clients.push(fakeClient2);
             resolve('FakeClient Success');

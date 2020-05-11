@@ -63,6 +63,13 @@ module.exports = function(app) {
         res.send(message);
     })
 
+    // get raw message body
+    app.get('/api/staff', function(req, res) {
+        const configPath = utils.getConfigFile();
+        let staffList = utils.readJSON(configPath + 'staffList.json');
+        res.send(staffList);
+    })
+
     // create message containing a link
     app.post('/api/message', function(req, res) {
         const link = req.body.link.link;
