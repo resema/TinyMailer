@@ -51,11 +51,12 @@ function createMailInformation(youtube, classModel) {
     mailInfo.plaintext = mailData.plaintext.replace(/YOUTUBE_LINK/g, youtube);
     mailInfo.htmltext = createMessage(youtube);
 
-    // let classDate = new Date(classModel.startDate);
-    // let options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}
-    // let startDateAndTime = classDate.toLocaleString('de-CH', options);
     mailInfo.subject = mailInfo.subject.concat(' - ', classModel.name, ', ' , classModel.startDate);
     mailInfo.htmltext = mailInfo.htmltext.replace(/CLASSNAME/g, classModel.name);
+
+    console.log('mailInfo & authInfo:');
+    console.log(mailInfo);
+    console.log(authInfo);
 
     return mailInfo;
 }
@@ -78,10 +79,6 @@ function sendMails(addresses, cli = false)
             pass: authInfo.pwd
         }
     });
-    
-    console.log('mailInfo & authInfo:');
-    console.log(mailInfo);
-    console.log(authInfo);
 
     return new Promise((resolve,reject) => {
         addresses.forEach(function(client) {
