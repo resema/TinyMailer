@@ -35,7 +35,7 @@ function getAllClasses(classes)
                 reject('findClass: ' + err);
             } else {
                 // Find all class
-                if(data.Classes.length > 0) {
+                if(data.Classes && data.Classes.length > 0) {
                     for(let idx = 0; idx < data.Classes.length; idx++) {
                         let classModel = new ClassModel();
                         classModel.id = data.Classes[idx].Id;
@@ -61,19 +61,20 @@ function getAllClasses(classes)
             },findClass)
         } else {
             // Fake Pooling
+            let options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'};
             let fakeClass = new ClassModel(
                 true,
                 1,
                 'Zumba',
-                new Date('April 9 2020 22:53'),
-                new Date('April 9 2020 23:30')
+                new Date('April 9 2020 22:53').toLocaleString("de-CH", options),
+                new Date('April 9 2020 23:30'.toLocaleString("de-CH", options))
             );
             let fakeClass2 = new ClassModel(
                 true,
                 2,
                 'Trampolin',
-                new Date('April 19 2020 22:53'),
-                new Date('April 19 2020 23:30')
+                new Date('April 19 2020 22:53').toLocaleString("de-CH", options),
+                new Date('April 19 2020 23:30').toLocaleString("de-CH", options)
             );
             classes.push(fakeClass);
             classes.push(fakeClass2);

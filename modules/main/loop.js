@@ -1,9 +1,6 @@
 "use strict"
 
 // modules
-const path = require('path');
-const { Worker, workerData, isMainThread, parentPort } = require('worker_threads');
-
 const polling = require('../polling');
 const messaging = require('../messaging');
 const timing = require('../timing');

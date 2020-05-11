@@ -13,10 +13,10 @@ const apiController = require('./modules/controller/apiControllers');
 const serverController = require('./modules/controller/serverController');
 
 // Define filepath
-const filepath = utils.getFilepath();
+const configPath = utils.getConfigFile();
 
 // Read Auth File
-let authInfo = configuration.getAuthenticationInfo(filepath);
+let authInfo = configuration.getAuthenticationInfo(configPath);
 messaging.setAuthentication(authInfo);
 polling.setAuthentication(authInfo);
 

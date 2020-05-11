@@ -8,9 +8,16 @@ function sleep(ms) {
 }
 
 // Get filepath
-function getFilepath() {
-    let filepath = './'
+function getProjectPath() {
+    let filepath = process.cwd();
+    return filepath;
+}
+
+// Get filepath of Configuration file
+function getConfigFile() {
+    let filepath = './';
     if(flags.CONFIGURATION_ACTIVE) {
+        console.log(process.cwd());
         filepath = filepath.concat('config/');
     } else {
         filepath = filepath.concat('dev/');
@@ -55,7 +62,8 @@ function containsObject(obj, list) {
 
 module.exports = {
     sleep: sleep,
-    getFilepath: getFilepath,
+    getProjectPath: getProjectPath,
+    getConfigFile: getConfigFile,
     readJSON: readJSON,
     readHTML: readHTML,
     containsObject: containsObject

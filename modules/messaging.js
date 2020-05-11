@@ -7,7 +7,7 @@ const utils = require('./utils');
 const gui = require('./gui');
 
 // Email information
-const mailInfo = {
+let mailInfo = {
     address: '',
     subject: '',
     plaintext: '',
@@ -78,6 +78,10 @@ function sendMails(addresses, cli = false)
             pass: authInfo.pwd
         }
     });
+    
+    console.log('mailInfo & authInfo:');
+    console.log(mailInfo);
+    console.log(authInfo);
 
     return new Promise((resolve,reject) => {
         addresses.forEach(function(client) {

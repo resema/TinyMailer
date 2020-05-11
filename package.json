@@ -3,6 +3,7 @@
   "version": "2.3.0",
   "description": "MindbodyOnline visits crawler and mail sender",
   "main": "tinymailer.js",
+  "author": "resema",
   "dependencies": {
     "body-parser": "^1.19.0",
     "chalk": "^3.0.0",
@@ -26,7 +27,6 @@
     "Mail",
     "Link"
   ],
-  "author": "resema",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/resema/TinyMailer/issues"

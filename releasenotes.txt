@@ -17,3 +17,4 @@ v2.4.0.0 - Email contains the class name and its starting date in the subject an
 v2.4.1.0 - Email subject different format and new time format option.
 v2.4.1.1 - Correcting timezone
 v3.0.0.0 - Converted to backend for TinyCockpit
+v3.0.0.1 - API bugs in creating message fixed
