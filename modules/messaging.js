@@ -51,10 +51,10 @@ function createMailInformation(youtube, classModel) {
     mailInfo.plaintext = mailData.plaintext.replace(/YOUTUBE_LINK/g, youtube);
     mailInfo.htmltext = createMessage(youtube);
 
-    let classDate = new Date(classModel.startDate);
-    let options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}
-    let startDateAndTime = classDate.toLocaleString('de-CH', options);
-    mailInfo.subject = mailInfo.subject.concat(' - ', classModel.name, ', ' , startDateAndTime);
+    // let classDate = new Date(classModel.startDate);
+    // let options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}
+    // let startDateAndTime = classDate.toLocaleString('de-CH', options);
+    mailInfo.subject = mailInfo.subject.concat(' - ', classModel.name, ', ' , classModel.startDate);
     mailInfo.htmltext = mailInfo.htmltext.replace(/CLASSNAME/g, classModel.name);
 
     return mailInfo;
