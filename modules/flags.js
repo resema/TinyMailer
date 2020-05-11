@@ -6,9 +6,9 @@ const flags = {
     TIMEWARP_ACTIVE: false,
 
     // Going live flags
-    MAILING_ACTIVE: true,
+    MAILING_ACTIVE: false,
     POOLING_ACTIVE: false,
-    CONFIGURATION_ACTIVE: false,
+    CONFIGURATION_ACTIVE: true,
 
     // Theme flag
     DARKTHEME_ACTIVE: true

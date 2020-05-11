@@ -8,6 +8,7 @@ const theme = require('../colortheme');
 const ClientModel = require('../../models/clientModel');
 const ClassModel = require('../../models/classModel');
 const database = require('../db/nosql')
+const utils = require('../utils');
 
 module.exports = function(app) {
 
