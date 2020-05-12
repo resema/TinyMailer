@@ -22,3 +22,4 @@ v3.0.1.0 - Staff API
 v3.0.2.0 - Staff working
 v3.0.2.1 - Messaging date bugfix
 v3.0.3.0 - Logging message only once
+v3.0.4.0 - Sorted classes

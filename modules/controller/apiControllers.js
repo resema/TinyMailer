@@ -26,6 +26,7 @@ module.exports = function(app) {
         let classes = []
         polling.getAllClasses(classes)
         .then((suc) => {
+            utils.sortClassByDateTime(classes);
             res.send(classes);
         })
         .catch((err) => {

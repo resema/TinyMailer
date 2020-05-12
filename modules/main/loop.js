@@ -16,6 +16,7 @@ function prepare(io) {
     let classes = []
     polling.getAllClasses(classes)
     .then(_ => {
+        utils.sortClassByDateTime(classes);
         classes.forEach((elem) => {
             database.addClass(elem.id, elem);
         });

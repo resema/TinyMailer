@@ -60,11 +60,26 @@ function containsObject(obj, list) {
     return false;
 }
 
+// sort a class array by date and time
+function sortClassByDateTime(classes) {
+    let getMin = (dateTime) => {
+        const time = dateTime.split(', ')[1];
+        const split = time.split(':');
+        return parseInt(split[0]) * 60 + parseInt(split[1]);
+    };
+
+    classes.sort((a, b) => {
+        return (getMin(a.startDate.toString()) > getMin(b.startDate.toString())) ? 1 : ((getMin(b.startDate) > getMin(a.startDate)) ? -1 : 0)
+    });
+    console.log('sorted');
+}
+
 module.exports = {
     sleep: sleep,
     getProjectPath: getProjectPath,
     getConfigFile: getConfigFile,
     readJSON: readJSON,
     readHTML: readHTML,
-    containsObject: containsObject
+    containsObject: containsObject,
+    sortClassByDateTime: sortClassByDateTime
 }
