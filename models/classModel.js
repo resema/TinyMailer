@@ -3,8 +3,8 @@
 function ClassModel(status = false, 
                     id = -1,
                     name = '',
-                    startDate = new Date(),
-                    endDate = new Date(),
+                    startDate = '',
+                    endDate = '',
                     clients = []) {
     this.status = status,
     this.id = id,

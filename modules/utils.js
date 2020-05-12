@@ -9,15 +9,25 @@ function sleep(ms) {
 
 // Get filepath
 function getProjectPath() {
-    let filepath = process.cwd();
+    let filepath = '';
+    console.log(process.platform);
+    if (process.platform !== 'win32') {
+        filepath.concat(process.cwd());
+        console.log('linux');
+    } else {
+        filepath.concat('../TinyMailer/');
+        console.log('linux');
+
+    }
+    console.log('Filepath = ' + filepath);
+
     return filepath;
 }
 
 // Get filepath of Configuration file
 function getConfigFile() {
-    let filepath = './';
+    let filepath = '../TinyMailer/';
     if(flags.CONFIGURATION_ACTIVE) {
-        console.log(process.cwd());
         filepath = filepath.concat('config/');
     } else {
         filepath = filepath.concat('dev/');
@@ -34,7 +44,7 @@ function readJSON(filename) {
     } catch(e) {
         console.log('Error:', e.stack);
     }
-    
+    console.log(file);
     return JSON.parse(file);
 }
 
