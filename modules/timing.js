@@ -45,16 +45,16 @@ function getTimeSpan(isClassFound) {
         timeSpan.isRunning = false;
     }
     else if(diffMin <= -20) {
-        timeSpan.milliseconds = 300000;     // +20min before class
+        timeSpan.milliseconds = 300000;     // more than +20min before class
     }
     else if(diffMin > -5) {
-        timeSpan.milliseconds = 20000;      // +5min before class
+        timeSpan.milliseconds = 20000;      // less than +5min before class
     }
     else if(diffMin > -11) {
-        timeSpan.milliseconds = 30000;      // +11min before class
+        timeSpan.milliseconds = 30000;      // less than +11min before class
     }
     else if(diffMin > -20) {
-        timeSpan.milliseconds = 60000;      // +20min before class
+        timeSpan.milliseconds = 60000;      // less than +20min before class
     }
 
     if(flags.DEV) {

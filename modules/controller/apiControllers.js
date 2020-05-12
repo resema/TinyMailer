@@ -68,7 +68,7 @@ module.exports = function(app) {
     // get raw message body
     app.get('/api/staff', function(req, res) {
         const configPath = utils.getConfigFile();
-        let staffList = utils.readJSON(configPath + 'staffList.json');
+        let staffList = utils.readJSON(configPath + '/staffList.json');
         res.send(staffList);
     })
 

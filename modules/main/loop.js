@@ -36,7 +36,7 @@ async function run(io, selClass) {
     // Read Staff List
     if(timeSpan.isRunning) {
         const configPath = utils.getConfigFile();
-        let staffList = utils.readJSON(configPath + 'staffList.json');
+        let staffList = utils.readJSON(configPath + '/staffList.json');
         messaging.sendMails(staffList.addresses)
     }
 

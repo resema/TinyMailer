@@ -15,7 +15,7 @@ const authInfo = {
 // Get Authentication info
 function getAuthenticationInfo(filepath) {
     // Read Auth File
-    let authData = utils.readJSON(filepath + 'authentication.json');
+    let authData = utils.readJSON(filepath + '/authentication.json');
     authInfo.host = authData.host;
     authInfo.port = authData.port;
     authInfo.emailAddr = authData.emailaddress;

@@ -42,6 +42,7 @@ function getAllClasses(classes)
                         classModel.name = data.Classes[idx].ClassDescription.Name;
                         let options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}
                         classModel.startDate = new Date(data.Classes[idx].StartDateTime).toLocaleString("de-CH", options);
+                        console.log(classModel.startDate);
                         classModel.endDate = new Date(data.Classes[idx].EndDateTime).toLocaleString("de-CH", options);
                         classes.push(classModel);
                     }

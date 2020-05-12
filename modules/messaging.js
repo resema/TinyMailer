@@ -19,7 +19,7 @@ let authInfo;
 
 // Create HTML message
 function createMessage(link) {
-    let message = utils.readHTML('./email/message.html');
+    let message = utils.readHTML('/email/message.html');
     return message.replace(/YOUTUBE_LINK/g, link);
 }
 
@@ -34,7 +34,7 @@ function replaceFieldsInMail(curClass) {
 
 // Get Mail info
 function getMailInformation(youtube) {
-    let mailData = utils.readJSON('./email/metadata.json');
+    let mailData = utils.readJSON('/email/metadata.json');
     mailInfo.address = mailData.emailaddress;
     mailInfo.subject = mailData.subject;
     mailInfo.plaintext = mailData.plaintext.replace(/YOUTUBE_LINK/g, youtube);
@@ -45,7 +45,7 @@ function getMailInformation(youtube) {
 
 // Creates Mail info and returns it
 function createMailInformation(youtube, classModel) {
-    let mailData = utils.readJSON('./email/metadata.json');
+    let mailData = utils.readJSON('/email/metadata.json');
     mailInfo.address = mailData.emailaddress;
     mailInfo.subject = mailData.subject;
     mailInfo.plaintext = mailData.plaintext.replace(/YOUTUBE_LINK/g, youtube);
