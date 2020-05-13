@@ -48,10 +48,15 @@ function createMailInformation(youtube, classModel) {
     let mailData = utils.readJSON('/email/metadata.json');
     mailInfo.address = mailData.emailaddress;
     mailInfo.subject = mailData.subject;
-    mailInfo.plaintext = mailData.plaintext.replace(/YOUTUBE_LINK/g, youtube);
-    mailInfo.htmltext = createMessage(youtube);
+    mailInfo.plaintext = mailData.plaintext.replace(/YOUTUBE_LINK/g, youtube.link);
+    mailInfo.htmltext = createMessage(youtube.link);
 
     mailInfo.subject = mailInfo.subject.concat(' - ', classModel.name, ', ' , classModel.startDate);
+    if (youtube.second) {
+        mailInfo.subject = 'NEW LINK - '.concat(mailInfo.subject);
+        mailInfo.htmltext = mailInfo.htmltext.replace(/Bald gehts los!/g, 'Hier kommt der neue Link! Entschuldige bitte die technischen Probleme.');
+        mailInfo.htmltext = mailInfo.htmltext.replace(/It will start soon!/g, 'Here comes the new link! Please excuse the technical problems.');
+    }
     mailInfo.htmltext = mailInfo.htmltext.replace(/CLASSNAME/g, classModel.name);
 
     console.log('mailInfo & authInfo:');

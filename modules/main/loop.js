@@ -31,7 +31,7 @@ function prepare(io) {
 // start main loop
 async function run(io, selClass) {
     timeSpan.isRunning = true;
-    timeSpan = timing.getTimeSpan(selClass);
+    timeSpan = timing.getInitialSpan();
 
     // Read Staff List
     if(timeSpan.isRunning) {

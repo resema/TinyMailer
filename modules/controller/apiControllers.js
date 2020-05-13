@@ -74,7 +74,8 @@ module.exports = function(app) {
 
     // create message containing a link
     app.post('/api/message', function(req, res) {
-        const link = req.body.link.link;
+        const link = req.body.link;
+        console.log(link.second);
         const obj = req.body.selClass;
         let selClass = new ClassModel(true,
                                       obj.id,

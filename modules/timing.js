@@ -41,7 +41,7 @@ function getTimeSpan(isClassFound) {
     var diffMin = calculateMin(curTime, isClassFound.startDate)
     console.log('diffMin: ' + diffMin);
 
-    if(diffMin > 0.16) {
+    if(diffMin > 0.16) {                    // after class start
         timeSpan.isRunning = false;
     }
     else if(diffMin <= -20) {

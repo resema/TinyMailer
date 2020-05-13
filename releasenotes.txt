@@ -25,3 +25,4 @@ v3.0.3.0 - Logging message only once
 v3.0.4.0 - Sorted classes
 v3.0.4.1 - Win32 fix
 v3.1.0.0 - Win32 version fully working
+v3.1.1.0 - New Link marked message
