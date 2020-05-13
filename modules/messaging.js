@@ -52,11 +52,13 @@ function createMailInformation(youtube, classModel) {
     mailInfo.htmltext = createMessage(youtube.link);
 
     mailInfo.subject = mailInfo.subject.concat(' - ', classModel.name, ', ' , classModel.startDate);
+    let textes = mailData.normal;
     if (youtube.second) {
         mailInfo.subject = 'NEW LINK - '.concat(mailInfo.subject);
-        mailInfo.htmltext = mailInfo.htmltext.replace(/Bald gehts los!/g, 'Hier kommt der neue Link! Entschuldige bitte die technischen Probleme.');
-        mailInfo.htmltext = mailInfo.htmltext.replace(/It will start soon!/g, 'Here comes the new link! Please excuse the technical problems.');
+        textes = mailData.newlink;
     }
+    mailInfo.htmltext = mailInfo.htmltext.replace(/TEXT-DE/g, textes.de);
+    mailInfo.htmltext = mailInfo.htmltext.replace(/TEXT-EN/g, textes.en);
     mailInfo.htmltext = mailInfo.htmltext.replace(/CLASSNAME/g, classModel.name);
 
     console.log('mailInfo & authInfo:');
